@@ -751,13 +751,6 @@ export default function App() {
     updateSelectedItem({ x: next.x, y: next.y }, false);
   };
 
-  const rotateSelectedItem = (degrees: number) => {
-    if (!selectedItem) return;
-    updateSelectedItem({
-      rotation: normalizeAngle((selectedItem.rotation || 0) + degrees),
-    });
-  };
-
   const duplicateSelectedItem = () => {
     if (!selectedItem) return;
 
