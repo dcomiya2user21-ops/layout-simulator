@@ -815,51 +815,48 @@ export default function App() {
     }
 
     const selectedRect = getItemRect(selectedItem);
-    let best: { distance: number; x: number; y: number } | null = null;
+    let bestDistance = Number.POSITIVE_INFINITY;
+    let bestX = selectedItem.x;
+    let bestY = selectedItem.y;
 
     others.forEach((other) => {
       const otherRect = getItemRect(other);
-      let candidate = { distance: Infinity, x: selectedItem.x, y: selectedItem.y };
+      let candidateDistance = Number.POSITIVE_INFINITY;
+      let candidateX = selectedItem.x;
+      let candidateY = selectedItem.y;
 
       if (direction === "right") {
-        candidate = {
-          distance: Math.abs(otherRect.right - selectedRect.left),
-          x: otherRect.right,
-          y: selectedItem.y,
-        };
+        candidateDistance = Math.abs(otherRect.right - selectedRect.left);
+        candidateX = otherRect.right;
+        candidateY = selectedItem.y;
       }
 
       if (direction === "left") {
-        candidate = {
-          distance: Math.abs(otherRect.left - selectedRect.right),
-          x: otherRect.left - selectedRect.width,
-          y: selectedItem.y,
-        };
+        candidateDistance = Math.abs(otherRect.left - selectedRect.right);
+        candidateX = otherRect.left - selectedRect.width;
+        candidateY = selectedItem.y;
       }
 
       if (direction === "bottom") {
-        candidate = {
-          distance: Math.abs(otherRect.bottom - selectedRect.top),
-          x: selectedItem.x,
-          y: otherRect.bottom,
-        };
+        candidateDistance = Math.abs(otherRect.bottom - selectedRect.top);
+        candidateX = selectedItem.x;
+        candidateY = otherRect.bottom;
       }
 
       if (direction === "top") {
-        candidate = {
-          distance: Math.abs(otherRect.top - selectedRect.bottom),
-          x: selectedItem.x,
-          y: otherRect.top - selectedRect.height,
-        };
+        candidateDistance = Math.abs(otherRect.top - selectedRect.bottom);
+        candidateX = selectedItem.x;
+        candidateY = otherRect.top - selectedRect.height;
       }
 
-      if (!best || candidate.distance < best.distance) {
-        best = candidate;
+      if (candidateDistance < bestDistance) {
+        bestDistance = candidateDistance;
+        bestX = candidateX;
+        bestY = candidateY;
       }
     });
 
-    if (!best) return;
-    updateSelectedItem({ x: Math.round(best.x), y: Math.round(best.y) });
+    updateSelectedItem({ x: Math.round(bestX), y: Math.round(bestY) });
     setSaveMessage("近くの家具にぴったり合わせました。");
   };
 
